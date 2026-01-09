@@ -49,6 +49,7 @@ function insert($tableName, $data)
 function update($tableName, $id, $data)
 {
     global $conn;
+
     $table = validate($tableName);
     $id = validate($id);
 
@@ -56,12 +57,13 @@ function update($tableName, $id, $data)
     foreach ($data as $column => $value) {
         $updateDataString .= "$column='$value', ";
     }
-    $finalUpdateData = substr($updateDataString, 0, -1); // remove last comma and space
 
-    $query = "UPDATE $table SET $finalUpdateData WHERE id='$id' ";
-    $result = mysqli_query($conn, $query);
-    return $result;
+    $finalUpdateData = substr($updateDataString, 0, -2); // FIXED
+
+    $query = "UPDATE $table SET $finalUpdateData WHERE id='$id'";
+    return mysqli_query($conn, $query);
 }
+
 
 // get record using this function
 function getAll($tableName, $status = NULL)
@@ -121,4 +123,16 @@ function delete($tableName, $id)
     $query = "DELETE FROM $table WHERE id='$id' LIMIT 1";
     $result = mysqli_query($conn, $query);
     return $result;
+}
+
+function checkParamId($type){
+    if(isset($_GET[$type])){
+        if($_GET[$type] != ''){
+            return $_GET[$type];
+        }else{
+            return '<h5>No Id Found</h5>';
+        }
+    }else{
+        return '<h5>No Id Given</h5>';
+    }
 }
