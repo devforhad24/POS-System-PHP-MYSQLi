@@ -4,20 +4,20 @@
 
     <div class="card mt-4 shadow">
         <div class="card-header">
-            <h4 class="mb-0">Admins/Staff
-                <a href="admins-create.php" class="btn btn-primary float-end">Add Admin</a>
+            <h4 class="mb-0">Categories
+                <a href="categories-create.php" class="btn btn-primary float-end">Add Category</a>
             </h4>
 
         </div>
         <div class="card-body">
             <?php alertMessage(); ?>
             <?php
-            $admins = getAll('admins');
-            if (!$admins) {
+            $categories = getAll('categories');
+            if (!$categories) {
                 echo '<h4>Somethnig went wrong!</h4>';
                 return false;
             }
-            if (mysqli_num_rows($admins) > 0) {
+            if (mysqli_num_rows($categories) > 0) {
             ?>
                 <div class="table-responsive">
                     <table class="table table-bordered table-striped">
@@ -25,27 +25,25 @@
                             <tr>
                                 <th>ID</th>
                                 <th>Name</th>
-                                <th>Email</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
 
-                            <?php foreach ($admins as $adminItem) : ?>
+                            <?php foreach ($categories as $item) : ?>
                                 <tr>
-                                    <td><?= $adminItem['id'] ?></td>
-                                    <td><?= $adminItem['name'] ?></td>
-                                    <td><?= $adminItem['email'] ?></td>
+                                    <td><?= $item['id'] ?></td>
+                                    <td><?= $item['name'] ?></td>
                                     <td>
-                                        <span class="badge <?= $adminItem['is_ban'] ? 'bg-danger' : 'bg-success'; ?>">
-                                            <?= $adminItem['is_ban'] ? 'Banned' : 'Active'; ?>
+                                        <span class="badge <?= $item['status'] ? 'bg-danger' : 'bg-success'; ?>">
+                                            <?= $item['status'] ? 'Hidden' : 'Visible'; ?>
                                         </span>
                                     </td>
 
                                     <td>
-                                        <a href="admins-edit.php?id=<?= $adminItem['id']; ?>" class="btn btn-success btn-sm">Edit</a>
-                                        <a onclick="return confirm('Are you sure you want to delete this record?');" href="admins-delete.php?id=<?= $adminItem['id']; ?>" class="btn btn-danger btn-sm">Delete</a>
+                                        <a href="categories-edit.php?id=<?= $item['id']; ?>" class="btn btn-success btn-sm">Edit</a>
+                                        <a onclick="return confirm('Are you sure you want to delete this record?');" href="categories-delete.php?id=<?= $item['id']; ?>" class="btn btn-danger btn-sm">Delete</a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

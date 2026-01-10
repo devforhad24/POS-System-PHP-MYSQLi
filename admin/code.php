@@ -64,14 +64,56 @@ if (isset($_POST['updateAdmin'])) {
             'phone' => $phone,
             'is_ban' => $is_ban,
         ];
-        $result = update('admins',$adminId, $data);
+        $result = update('admins', $adminId, $data);
 
         if ($result) {
-            redirect('admins-edit.php?id='.$adminId, 'Admin Updated successfully!');
+            redirect('admins-edit.php?id=' . $adminId, 'Admin Updated successfully!');
         } else {
-            redirect('admins-edit.php?id='.$adminId, 'Something went wrong!');
+            redirect('admins-edit.php?id=' . $adminId, 'Something went wrong!');
         }
     } else {
         redirect('admins-create.php', 'Please fill required fields.');
     }
 }
+
+if (isset($_POST['saveCategroy'])) {
+    $name = validate($_POST['name']);
+    $description = validate($_POST['description']);
+    $status = isset($_POST['status']) == true ? 1:0;
+
+    $data = [
+        'name' => $name,
+        'description' => $description,
+        'status' => $status,
+    ];
+    $result = insert('categories', $data);
+
+    if ($result) {
+        redirect('categories.php', 'Admin Created successfully!');
+    } else {
+        redirect('categories-create.php', 'Something went wrong!');
+    }
+}
+
+if (isset($_POST['updateCategroy'])) {
+    $categoryId = validate($_POST['categoryId']);
+
+    $name = validate($_POST['name']);
+    $description = validate($_POST['description']);
+    $status = isset($_POST['status']) == true ? 1:0;
+
+    $data = [
+        'name' => $name,
+        'description' => $description,
+        'status' => $status,
+    ];
+    $result = update('categories', $categoryId,$data);
+
+    if ($result) {
+        redirect('categories-edit.php?id='.$categoryId, 'Category Updated successfully!');
+    } else {
+        redirect('categories-edit.php?id='.$categoryId, 'Something went wrong!');
+    }
+}
+
+

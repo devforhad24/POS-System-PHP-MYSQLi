@@ -6,8 +6,6 @@ $paraResultId = checkParamId('id');
 if(is_numeric($paraResultId)){
     $adminId = validate($paraResultId);
 
-    $adminId = validate($paraResultId);
-
     $admin = getById('admins', $adminId);
     if($admin['status'] == 200){
         $adminDeleteRes = delete('admins', $adminId);
