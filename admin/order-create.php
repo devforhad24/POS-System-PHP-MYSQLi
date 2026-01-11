@@ -1,4 +1,6 @@
-<?php include 'includes/header.php'; ?>
+<?php include 'includes/header.php';
+$sessionProducts = $_SESSION['productItems'] ?? [];
+?>
 
 <div class="container-fluid px-4">
 
@@ -47,7 +49,62 @@
             </form>
         </div>
     </div>
-    <?php
-    print_r($_SESSION['productItemIds']);
-    ?>
+
+    <!-- Create Order - Displaying products data from Session variable -->
+     <div class="card mt-3">
+        <div class="card-header">
+            <div class="mb-0">
+                <h4 class="mb-0">Products</h4>
+            </div>
+            <div class="card-body">
+                <?php
+                if(isset($_SESSION['productItems'])){
+                    ?>
+                    <div class="table-responsive mb-3">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Product Name</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>Total Price</th>
+                                    <th>Remove</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php 
+                                $i =1;
+                                foreach($sessionProducts as $key => $item) : ?>
+                                    <tr>
+                                        <td><?= $i++; ?></td>
+                                        <td><?= $item['name']; ?></td>
+                                        <td><?= $item['price']; ?></td>
+                                        <td>
+                                            <div class="input-group">
+                                                <button class="input-group-text"> - </button>
+                                                <input type="text" value="<?= $item['quantity']; ?>" class="qty quantityInput" >
+                                                <button class="input-group-text"> + </button>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <?= number_format($item['price'] * $item['quantity'], 0); ?>
+                                        </td>
+                                        <td>
+                                            <a href="oder-item-delete.php?index=<?= $key; ?>" class="btn btn-sm btn-danger">Remove</a>
+                                        </td>
+                                    </tr>
+                                    <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <?php
+                }else{
+                    echo '<h5>No Items added</h5>';
+                }
+                ?>
+            </div>
+        </div>
+     </div>
+
     <?php include 'includes/footer.php'; ?>
