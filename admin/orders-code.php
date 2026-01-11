@@ -1,4 +1,7 @@
 <?php
+
+use Dom\Mysql;
+
 include('../config/function.php');
 
 if(!isset($_SESSION['productItems'])){
@@ -93,5 +96,27 @@ if (isset($_POST['productIncDec'])) {
             'message' => 'Something went wrong. Please Refresh'
         ]);
         exit;
+    }
+}
+
+if(isset($_POST['proceedToPlaceBtn'])){
+    $phone = validate($_POST['cphone']);
+    $payment_mode = validate($_POST['payment_mode']);
+
+    // checking for customer
+    $checkCustomer = mysqli_query($conn, "SELECT * FROM customers WHERE phone='$phone' LIMIT 1");
+    if($checkCustomer){
+        if(mysqli_num_rows($checkCustomer) > 0){
+            $_SESSION['invoice_no'] = "INV-".rand(111111,999999);
+            $_SESSION['cphone'] = $phone;
+            $_SESSION['payment_mode'] = $payment_mode;
+
+            jsonResponse(200, 'success', 'Customer Found');
+        }else{
+            $_SESSION['cphone'] = $phone;
+            jsonResponse(404, 'warning', 'Customer Not Found');
+        }
+    }else{
+        jsonResponse(500, 'error', 'Something went wrong');
     }
 }

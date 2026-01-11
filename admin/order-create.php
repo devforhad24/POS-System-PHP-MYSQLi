@@ -2,6 +2,36 @@
 $sessionProducts = $_SESSION['productItems'] ?? [];
 ?>
 
+<!-- Modal -->
+<div class="modal fade" id="addCustomerModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Add Customer</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="">Enter Customer Name</label>
+                    <input type="text" id="c_name" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label for="">Enter Customer Phone No.</label>
+                    <input type="number" id="c_phone" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label for="">Enter Customer Email (optional)</label>
+                    <input type="text" id="c_email" class="form-control">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="container-fluid px-4">
 
     <div class="card mt-4 shadow">
@@ -51,19 +81,19 @@ $sessionProducts = $_SESSION['productItems'] ?? [];
     </div>
 
     <!-- Create Order - Displaying products data from Session variable -->
-     <div class="card mt-3">
+    <div class="card mt-3">
         <div class="card-header">
             <div class="mb-0">
                 <h4 class="mb-0">Products</h4>
             </div>
             <div class="card-body" id="productArea">
                 <?php
-                if(isset($_SESSION['productItems'])){
-                    if(empty($sessionProducts)){
+                if (isset($_SESSION['productItems'])) {
+                    if (empty($sessionProducts)) {
                         unset($_SESSION['productItemIds']);
                         unset($_SESSION['productItems']);
                     }
-                    ?>
+                ?>
                     <div class="table-responsive mb-3" id="productContent">
                         <table class="table table-bordered table-striped">
                             <thead>
@@ -77,9 +107,9 @@ $sessionProducts = $_SESSION['productItems'] ?? [];
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php 
-                                $i =1;
-                                foreach($sessionProducts as $key => $item) : ?>
+                                <?php
+                                $i = 1;
+                                foreach ($sessionProducts as $key => $item) : ?>
                                     <tr>
                                         <td><?= $i++; ?></td>
                                         <td><?= $item['name']; ?></td>
@@ -88,7 +118,7 @@ $sessionProducts = $_SESSION['productItems'] ?? [];
                                             <div class="input-group qtyBox">
                                                 <input type="hidden" value="<?= $item['product_id']; ?>" class="prodId">
                                                 <button class="input-group-text decrement"> - </button>
-                                                <input type="text" value="<?= $item['quantity']; ?>" class="qty quantityInput" >
+                                                <input type="text" value="<?= $item['quantity']; ?>" class="qty quantityInput">
                                                 <button class="input-group-text increment"> + </button>
                                             </div>
                                         </td>
@@ -99,17 +129,40 @@ $sessionProducts = $_SESSION['productItems'] ?? [];
                                             <a href="oder-item-delete.php?index=<?= $key; ?>" class="btn btn-sm btn-danger">Remove</a>
                                         </td>
                                     </tr>
-                                    <?php endforeach; ?>
+                                <?php endforeach; ?>
                             </tbody>
                         </table>
                     </div>
-                    <?php
-                }else{
+
+                    <div class="mt-2">
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label for="">Select Payment Mode</label>
+                                <select id="payment_mode" class="form-select">
+                                    <option value="">-- Select Payment --</option>
+                                    <option value="Cash Payment">Cash Payment</option>
+                                    <option value="Online Payment">Online Payment</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="">Enter Customer Phone Number</label>
+                                <input type="number" id="cphone" class="form-control" value="">
+                            </div>
+                            <div class="col-md-4">
+                                <br>
+                                <button type="button" class="btn btn-warning w-100 proceedToPlace">Proceed to place order</button>
+                            </div>
+                        </div>
+                    </div>
+
+                <?php
+                } else {
                     echo '<h5>No Items added</h5>';
                 }
                 ?>
             </div>
         </div>
-     </div>
+    </div>
 
     <?php include 'includes/footer.php'; ?>
