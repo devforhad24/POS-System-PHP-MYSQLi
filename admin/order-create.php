@@ -59,6 +59,10 @@ $sessionProducts = $_SESSION['productItems'] ?? [];
             <div class="card-body" id="productArea">
                 <?php
                 if(isset($_SESSION['productItems'])){
+                    if(empty($sessionProducts)){
+                        unset($_SESSION['productItemIds']);
+                        unset($_SESSION['productItems']);
+                    }
                     ?>
                     <div class="table-responsive mb-3" id="productContent">
                         <table class="table table-bordered table-striped">
