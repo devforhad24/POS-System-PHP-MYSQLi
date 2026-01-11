@@ -1,7 +1,7 @@
 <?php include 'includes/header.php';
 $sessionProducts = $_SESSION['productItems'] ?? [];
 ?>
-
+ 
 <!-- Modal -->
 <div class="modal fade" id="addCustomerModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -17,7 +17,7 @@ $sessionProducts = $_SESSION['productItems'] ?? [];
                 </div>
                 <div class="mb-3">
                     <label for="">Enter Customer Phone No.</label>
-                    <input type="number" id="c_phone" class="form-control">
+                    <input type="text" id="c_phone" class="form-control">
                 </div>
                 <div class="mb-3">
                     <label for="">Enter Customer Email (optional)</label>
@@ -26,7 +26,7 @@ $sessionProducts = $_SESSION['productItems'] ?? [];
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-primary saveCustomer">Save</button>
             </div>
         </div>
     </div>

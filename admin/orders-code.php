@@ -120,3 +120,30 @@ if(isset($_POST['proceedToPlaceBtn'])){
         jsonResponse(500, 'error', 'Something went wrong');
     }
 }
+
+if (isset($_POST['saveCustomerBtn'])) {
+
+    $name  = validate($_POST['name'] ?? '');
+    $phone = validate($_POST['phone'] ?? '');
+    $email = validate($_POST['email'] ?? '');
+
+    // 🔥 CORRECT validation
+    if ($name === '' || $phone === '') {
+        jsonResponse(422, 'warning', 'Please fill required fields');
+    }
+
+    $data = [
+        'name'  => $name,
+        'phone' => $phone,
+        'email' => $email,
+    ];
+
+    $result = insert('customers', $data);
+
+    if ($result) {
+        jsonResponse(200, 'success', 'Customer Created Successfully');
+    } else {
+        jsonResponse(500, 'error', 'Something went wrong');
+    }
+}
+
