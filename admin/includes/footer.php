@@ -24,12 +24,14 @@
 <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
 <script src="assets/js/datatables-simple-demo.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
 <script>
     // In your Javascript (external .js resource or <script> tag)
     $(document).ready(function() {
         $('.mySelect2').select2();
     });
 </script>
+<script src="assets/js/custom.js"></script>
 </body>
 
 </html>

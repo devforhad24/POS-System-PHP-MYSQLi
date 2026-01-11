@@ -58,3 +58,40 @@ if (isset($_POST['addItem'])) {
         redirect('order-create.php', 'Something went wrong!');
     }
 }
+
+if (isset($_POST['productIncDec'])) {
+
+    $productId = validate($_POST['product_id']);
+    $quantity  = validate($_POST['quantity']);
+
+    $flag = false;
+    $total = 0;
+
+    foreach ($_SESSION['productItems'] as $key => $item) {
+
+        if ($item['product_id'] == $productId) {
+
+            $flag = true;
+            $_SESSION['productItems'][$key]['quantity'] = $quantity;
+
+            $price = $_SESSION['productItems'][$key]['price'];
+            $total = $price * $quantity;
+            break;
+        }
+    }
+
+    if ($flag) {
+        echo json_encode([
+            'status' => 200,
+            'message' => 'Quantity updated',
+            'total' => $total
+        ]);
+        exit;
+    } else {
+        echo json_encode([
+            'status' => 500,
+            'message' => 'Something went wrong. Please Refresh'
+        ]);
+        exit;
+    }
+}

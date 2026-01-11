@@ -91,7 +91,7 @@ function getById($tableName, $id)
     if ($result) {
         if (mysqli_num_rows($result) == 1) {
             $row = mysqli_fetch_array($result);
-                $response = [
+            $response = [
                 'status' => 200,
                 'data' => $row,
                 'message' => 'Data Found.',
@@ -125,21 +125,32 @@ function delete($tableName, $id)
     return $result;
 }
 
-function checkParamId($type){
-    if(isset($_GET[$type])){
-        if($_GET[$type] != ''){
+function checkParamId($type)
+{
+    if (isset($_GET[$type])) {
+        if ($_GET[$type] != '') {
             return $_GET[$type];
-        }else{
+        } else {
             return '<h5>No Id Found</h5>';
         }
-    }else{
+    } else {
         return '<h5>No Id Given</h5>';
     }
 }
 
-function logoutSession(){
+function logoutSession()
+{
     unset($_SESSION['loggedIn']);
     unset($_SESSION['loggedInUser']);
 }
 
-?>
+function jsonResponse($status, $status_type, $message)
+{
+    $response = [
+        'status' => $status,
+        'status_type' => $status_type,
+        'message' => $message
+    ];
+    echo json_encode($response);
+    return;
+}

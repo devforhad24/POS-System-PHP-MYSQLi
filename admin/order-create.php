@@ -56,15 +56,15 @@ $sessionProducts = $_SESSION['productItems'] ?? [];
             <div class="mb-0">
                 <h4 class="mb-0">Products</h4>
             </div>
-            <div class="card-body">
+            <div class="card-body" id="productArea">
                 <?php
                 if(isset($_SESSION['productItems'])){
                     ?>
-                    <div class="table-responsive mb-3">
+                    <div class="table-responsive mb-3" id="productContent">
                         <table class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th>Id</th>
+                                    <th>SL</th>
                                     <th>Product Name</th>
                                     <th>Price</th>
                                     <th>Quantity</th>
@@ -81,13 +81,14 @@ $sessionProducts = $_SESSION['productItems'] ?? [];
                                         <td><?= $item['name']; ?></td>
                                         <td><?= $item['price']; ?></td>
                                         <td>
-                                            <div class="input-group">
-                                                <button class="input-group-text"> - </button>
+                                            <div class="input-group qtyBox">
+                                                <input type="hidden" value="<?= $item['product_id']; ?>" class="prodId">
+                                                <button class="input-group-text decrement"> - </button>
                                                 <input type="text" value="<?= $item['quantity']; ?>" class="qty quantityInput" >
-                                                <button class="input-group-text"> + </button>
+                                                <button class="input-group-text increment"> + </button>
                                             </div>
                                         </td>
-                                        <td>
+                                        <td class="totalPrice">
                                             <?= number_format($item['price'] * $item['quantity'], 0); ?>
                                         </td>
                                         <td>
