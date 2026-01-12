@@ -35,7 +35,7 @@
                                     <td><?= $orderItem['order_status']; ?></td>
                                     <td><?= $orderItem['payment_mode']; ?></td>
                                     <td>
-                                        <a href="#" class="btn btn-sm btn-info mb-0 px-2">View</a>
+                                        <a href="orders-view.php?track=<?= $orderItem['tracking_no']; ?>" class="btn btn-sm btn-info mb-0 px-2">View</a>
                                         <a href="#" class="btn btn-sm btn-warning mb-0 px-2">Print</a>
                                     </td>
                                 </tr>
