@@ -147,3 +147,76 @@ if (isset($_POST['saveCustomerBtn'])) {
     }
 }
 
+if(isset($_POST['saveOrder'])){
+    $phone = validate($_SESSION['cphone']);
+    $invoice_no = validate($_SESSION['invoice_no']);
+    $payment_mode = validate($_SESSION['payment_mode']);
+    $order_placed_by_id = $_SESSION['loggedInUser']['user_id'];
+
+    $checkCustomer = mysqli_query($conn, "SELECT * FROM customers WHERE phone='$phone' LIMIT 1");
+    if(!$checkCustomer){
+        jsonResponse(500, 'error', 'Something went wrong');
+    }
+
+    if(mysqli_num_rows($checkCustomer) > 0){
+        $customerData = mysqli_fetch_assoc($checkCustomer);
+        if(!isset($_SESSION['productItems'])){
+            jsonResponse(404, 'warning', 'No Items to place order!');
+        }
+        $sessionProducts = $_SESSION['productItems'];
+        $totalAmount = 0;
+
+        foreach($sessionProducts as $amtItem){
+            $totalAmount += $amtItem['price'] * $amtItem['quantity'];
+        }
+
+        $data = [
+            'customer_id' => $customerData['id'],
+            'tracking_no' => rand(11111,99999),
+            'invoice_no' => $invoice_no,
+            'total_amount' => $totalAmount,
+            'order_date' => date('Y-m-d'),
+            'order_status' => 'booked',
+            'payment_mode' => $payment_mode,
+            'order_placed_by_id' => $order_placed_by_id
+        ];
+        $result = insert('orders', $data);
+        $lastOrderId = mysqli_insert_id($conn);
+
+        foreach($sessionProducts as $prodItem){
+            
+            $productId = $prodItem['product_id'];
+            $price = $prodItem['price'];
+            $quantity = $prodItem['quantity'];
+
+            // inseting order items
+            $dataOrderItem = [
+                'order_id' => $lastOrderId,
+                'product_id' => $productId,
+                'price' => $price,
+                'quantity' => $quantity,
+            ];
+            $orderItemQuery = insert('order_items', $dataOrderItem);
+
+            // checking for the books quantity and decreasing quantity and making total quantity
+            $checkProductQuantityQuery = mysqli_query($conn, "SELECT * FROM products WHERE id='$productId' ");
+            $productQtyData = mysqli_fetch_assoc($checkProductQuantityQuery);
+            $totalProductQuantity = $productQtyData['quantity'] - $quantity;
+
+            $dataUpdate = [
+                'quantity' => $totalProductQuantity
+            ];
+            $updateProductQty = update('products', $productId, $dataUpdate);
+        }
+
+        unset($_SESSION['productItemIds']);
+        unset($_SESSION['productItems']);
+        unset($_SESSION['cphone']);
+        unset($_SESSION['payment_mode']);
+        unset($_SESSION['invoice_no']);
+
+        jsonResponse(200, 'success', 'Order Placed Successfully');
+    }else{
+        jsonResponse(404, 'warning', 'No customer found!');
+    }
+}

@@ -6,6 +6,24 @@ if (!isset($_SESSION['productItems'])) {
 
 ?>
 
+<!-- Modal -->
+<div class="modal fade" id="orderSuccessModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="mb-3 p-4">
+                    <h5 id="orderPlacedSuccessMessage"></h5>
+                </div>
+
+
+                <a href="orders.php" class="btn btn-secondary">Close</a>
+                <button type="button" class="btn btn-info">Print</button>
+                <button type="button" class="btn btn-warning">Download PDF</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="container-fluid px-4">
     <div class="row">
         <div class="col-md-12">
@@ -40,9 +58,9 @@ if (!isset($_SESSION['productItems'])) {
                                             <tr>
                                                 <td>
                                                     <h5 style="font-size: 20px; line-height: 30px; margin: 0px; padding:0">Customer Details</h5>
-                                                    <p style="font-size: 14px; line-height:20px; margin:0px; padding:0">Customer Name: <?= $cRowData['name']; ?></p>
-                                                    <p style="font-size: 14px; line-height:20px; margin:0px; padding:0">Customer Phone No: <?= $cRowData['phone']; ?></p>
-                                                    <p style="font-size: 14px; line-height:20px; margin:0px; padding:0">Customer Email Id: <?= $cRowData['email']; ?></p>
+                                                    <p style="font-size: 14px; line-height:20px; margin:0px; padding:0">Name: <?= $cRowData['name']; ?></p>
+                                                    <p style="font-size: 14px; line-height:20px; margin:0px; padding:0">Phone No: <?= $cRowData['phone']; ?></p>
+                                                    <p style="font-size: 14px; line-height:20px; margin:0px; padding:0">Email Id: <?= $cRowData['email']; ?></p>
                                                 </td>
                                                 <td align="end">
                                                     <h5 style="font-size: 20px; line-height: 30px; margin: 0px; padding:0">Invoice Details</h5>
@@ -62,53 +80,59 @@ if (!isset($_SESSION['productItems'])) {
                         }
                         ?>
                         <?php
-                            if(isset($_SESSION['productItems'])){
-                                $sessionProducts = $_SESSION['productItems'];
-                                ?>
-                                <div class="table-responsive mb-3">
-                                    <table class="table table-striped table-bordered" style="width: 100%;" cellpadding="5">
-                                        <thead>
+                        if (isset($_SESSION['productItems'])) {
+                            $sessionProducts = $_SESSION['productItems'];
+                        ?>
+                            <div class="table-responsive mb-3">
+                                <table class="table table-striped table-bordered" style="width: 100%;" cellpadding="5">
+                                    <thead>
+                                        <tr>
+                                            <th align="start" style="border-bottom: 1px solid #ccc;" width="5%">ID</th>
+                                            <th align="start" style="border-bottom: 1px solid #ccc;">Product Name</th>
+                                            <th align="start" style="border-bottom: 1px solid #ccc;" width="10%">Price</th>
+                                            <th align="start" style="border-bottom: 1px solid #ccc;" width="10%">Quantity</th>
+                                            <th align="start" style="border-bottom: 1px solid #ccc;" width="15%">Total Price</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        $i = 1;
+                                        $totalAmount = 0;
+                                        foreach ($sessionProducts as $key => $row) :
+                                            $totalAmount += $row['price'] * $row['quantity'];
+                                        ?>
                                             <tr>
-                                                <th align="start" style="border-bottom: 1px solid #ccc;" width="5%">ID</th>
-                                                <th align="start" style="border-bottom: 1px solid #ccc;">Product Name</th>
-                                                <th align="start" style="border-bottom: 1px solid #ccc;" width="10%">Price</th>
-                                                <th align="start" style="border-bottom: 1px solid #ccc;" width="10%">Quantity</th>
-                                                <th align="start" style="border-bottom: 1px solid #ccc;" width="15%">Total Price</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php
-                                                $i = 1;
-                                                $totalAmount = 0;
-                                                foreach($sessionProducts as $key=> $row) :
-                                                    $totalAmount += $row['price'] * $row['quantity'];
-                                            ?>
-                                            <tr>
-                                                <td style="border-bottom:  1px soid #ccc;"><?= $i++; ?></td>  
-                                                <td style="border-bottom:  1px soid #ccc;"><?= $row['name']; ?></td>  
-                                                <td style="border-bottom:  1px soid #ccc;"><?= number_format($row['price'],0) ?></td>  
-                                                <td style="border-bottom:  1px soid #ccc;"><?=$row['quantity']; ?></td>  
+                                                <td style="border-bottom:  1px soid #ccc;"><?= $i++; ?></td>
+                                                <td style="border-bottom:  1px soid #ccc;"><?= $row['name']; ?></td>
+                                                <td style="border-bottom:  1px soid #ccc;"><?= number_format($row['price'], 0) ?></td>
+                                                <td style="border-bottom:  1px soid #ccc;"><?= $row['quantity']; ?></td>
                                                 <td style="border-bottom:  1px soid #ccc;" class="fw-bold">
                                                     <?= number_format($row['price'] * $row['quantity'], 0) ?>
-                                                </td>  
+                                                </td>
                                             </tr>
-                                            <?php endforeach; ?>
-                                            <tr>
-                                                <td colspan="4" align="end" style="font-weight: bold;">Grand Total: </td>
-                                                <td colspan="1" style="font-weight: bold;"><?= number_format($totalAmount,0); ?></td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="5">Payment Mode: <?= $_SESSION['payment_mode']; ?></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            <?php
-                            }else{
-                                echo '<h5 class="text-center">No Items added</h5>';
-                            }
+                                        <?php endforeach; ?>
+                                        <tr>
+                                            <td colspan="4" align="end" style="font-weight: bold;">Grand Total: </td>
+                                            <td colspan="1" style="font-weight: bold;"><?= number_format($totalAmount, 0); ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="5">Payment Mode: <?= $_SESSION['payment_mode']; ?></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <?php
+                        } else {
+                            echo '<h5 class="text-center">No Items added</h5>';
+                        }
                         ?>
                     </div>
+
+                    <?php if (isset($_SESSION['productItems'])) : ?>
+                        <div class="mt-4 text-end">
+                            <button type="button" class="btn btn-primary px-4 mx-1" id="saveOrder">Save</button>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>

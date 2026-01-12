@@ -41,7 +41,7 @@ $(document).ready(function () {
       },
     });
   });
-/* proceed to place order */
+  /* proceed to place order */
   $(document).on("click", ".proceedToPlace", function () {
     var cphone = $("#cphone").val();
     var payment_mode = $("#payment_mode").val();
@@ -75,8 +75,8 @@ $(document).ready(function () {
           }).then((value) => {
             switch (value) {
               case "catch":
-                $('#c_phone').val(cphone);
-                $('#addCustomerModal').modal('show');
+                $("#c_phone").val(cphone);
+                $("#addCustomerModal").modal("show");
                 // console.log("Pop the customer add modal");
                 break;
               default:
@@ -90,41 +90,67 @@ $(document).ready(function () {
   });
 
   /* add customer to customers table */
-  $(document).on('click','.saveCustomer', function(){
-    var c_name = $('#c_name').val();
-    var c_phone = $('#c_phone').val();
-    var c_email = $('#c_email').val();
+  $(document).on("click", ".saveCustomer", function () {
+    var c_name = $("#c_name").val();
+    var c_phone = $("#c_phone").val();
+    var c_email = $("#c_email").val();
 
-    if(c_name != '' && c_phone != ''){
-      if($.isNumeric(c_phone)){
+    if (c_name != "" && c_phone != "") {
+      if ($.isNumeric(c_phone)) {
         var data = {
-          'saveCustomerBtn': true,
-          'name': c_name,
-          'phone': c_phone,
-          'email': c_email,
+          saveCustomerBtn: true,
+          name: c_name,
+          phone: c_phone,
+          email: c_email,
         };
         $.ajax({
-          type:"POST",
+          type: "POST",
           url: "orders-code.php",
           data: data,
-          success: function(response){
+          success: function (response) {
             var res = JSON.parse(response);
 
-            if(res.status == 200){
+            if (res.status == 200) {
               swal(res.message, res.message, res.status_type);
-              $('#addCustomerModal').modal('hide');
-            }else if(res.status == 422){
+              $("#addCustomerModal").modal("hide");
+            } else if (res.status == 422) {
               swal(res.message, res.message, res.status_type);
-            }else{
+            } else {
               swal(res.message, res.message, res.status_type);
             }
-          }
+          },
         });
-      }else{
+      } else {
         swal("Enter Valid Phone Number", "", "warning");
       }
-    }else{
-       swal("Please fill required fields", "", "warning");
+    } else {
+      swal("Please fill required fields", "", "warning");
     }
-  })
+  });
+
+  /* save order */
+  $(document).on("click", "#saveOrder", function () {
+    $.ajax({
+      type: "POST",
+      url: "orders-code.php",
+      data: {
+        saveOrder: true,
+      },
+      success: function (response){
+        var res = JSON.parse(response);
+
+        if(res.status == 200){
+          swal(res.message, res.message, res.status_type);
+          $('#orderPlacedSuccessMessage').text(res.message);
+          $('#orderSuccessModal').modal('show');
+        }else{
+          swal(res.message, res.message, res.status_type);
+        }
+      }
+    });
+  });
+
+
+
+  
 });
